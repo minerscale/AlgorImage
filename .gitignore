@@ -28,5 +28,10 @@
 *.x86_64
 *.hex
 
+tools/proposal.odt
+tools/algorimage.sublime-workspace
+out/algorimage
+frames/
+
 # Debug files
 *.dSYM/
