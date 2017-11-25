@@ -2,7 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "/home/aaron/programming/algorimage",
+			"path": "../../algorimage",
             "folder_exclude_patterns": ["frames"],
 		}
 	],
@@ -27,10 +27,6 @@
                     "name": "Run",
                     "shell_cmd": "make run"
                 },
-                {
-                    "name": "Keep",
-                    "shell_cmd": "make keep"
-                }
             ]
         }
     ],
