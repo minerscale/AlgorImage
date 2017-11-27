@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+mkdir -p frames
 echo "Generating the frames..."
 ./algorimage
 echo "Sticking them together..."

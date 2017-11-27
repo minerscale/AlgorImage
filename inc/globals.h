@@ -7,5 +7,6 @@
 typedef unsigned char u8;
 
 u8 image[DIMENSION_Y][DIMENSION_X][3];
+FILE *file;
 
 #endif // GLOBALS_H

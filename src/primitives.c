@@ -1,5 +1,8 @@
+#include <stdio.h>
+
 #include "globals.h"
 #include "primitives.h"
+#include "miniz.h"
 
 // Reduces the brightness of every pixel by amount.
 // Slow. use wisley
@@ -17,9 +20,11 @@ void dimPhosphor(int amount){
 }
 
 void drawPixel(int x, int y, u8 r, u8 g, u8 b){
-    image[y][x][0] = r;
-    image[y][x][1] = g;
-    image[y][x][2] = b;
+    if (x > 0 && x < DIMENSION_X && y > 0 && y < DIMENSION_Y){
+        image[y][x][0] = r;
+        image[y][x][1] = g;
+        image[y][x][2] = b;
+    }
 }
 
 void drawLine(int x1, int y1, int x2, int y2, u8 r, u8 g, u8 b, int thicc){
@@ -36,16 +41,46 @@ void drawLine(int x1, int y1, int x2, int y2, u8 r, u8 g, u8 b, int thicc){
         for (float y = ySmall; y < yBig; y++){
             x = ((float)(y-y1) / (float)m) + (float)x1;
             drawPixel((int)x, (int)y, r, g, b);
-            if (x+1 < DIMENSION_X && thicc) drawPixel((int)x+1, (int)y, r, g, b);
-            if (x-1 > 0 && thicc) drawPixel((int)x-1, (int)y, r, g, b);
+            if (thicc){
+                drawPixel((int)x+1, (int)y, r, g, b);
+                drawPixel((int)x-1, (int)y, r, g, b);
+            }
         }
     }else{
         float y;
         for (float x = xSmall; x < xBig; x++){
             y = m * (float)(x - x1) + (float)y1;
             drawPixel((int)x, (int)y, r, g, b);
-            if (y+1 < DIMENSION_Y && thicc) drawPixel((int)x, (int)y + 1, r, g, b);
-            if (y-1 > 0 && thicc) drawPixel((int)x, (int)y - 1, r, g, b);
+            if (thicc){
+                drawPixel((int)x, (int)y + 1, r, g, b);
+                drawPixel((int)x, (int)y - 1, r, g, b);
+            }
         }
+    }
+}
+
+int writeToFile(int fileNumber){
+    char filename[60];
+    sprintf(filename, "./frames/frame_%d.png", fileNumber);
+    FILE *fp = fopen(filename, "wb"); // b - binary mode
+    size_t png_data_size = 0;
+    void *PNG_data = tdefl_write_image_to_png_file_in_memory_ex(image, DIMENSION_X, DIMENSION_Y, 3, &png_data_size, 6, MZ_FALSE);
+    fwrite(PNG_data, 1, png_data_size, fp);
+    (void) fclose(fp);
+    return fileNumber + 1;
+}
+
+int sleep(int offset, int numFrames){
+    for (int i; i < numFrames; i++){
+        writeToFile(i + offset);
+    }
+    return offset + numFrames;
+}
+
+void drawImage(line* shape, int x, int y, float scale, u8 r, u8 g, u8 b, int thicc){
+    for (int i = 0;; i++){
+        if (shape[i].x1 == -1) break;
+        drawLine((int)((shape[i].x1)*scale + x), (int)((shape[i].y1)*scale + y),
+            (int)((shape[i].x2)*scale + x), (int)((shape[i].y2)*scale + y), r, g, b, thicc);
     }
 }
