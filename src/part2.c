@@ -68,7 +68,7 @@ void part2(int offset){
 
     offset = sleep (offset, 30);
 
-    
+
     // m a k e  a  n e o n  g r i d
     for (int i = 0; i < 60; i++){
         for (int j = 0; j < 60; j++){
@@ -82,5 +82,10 @@ void part2(int offset){
         offset = writeToFile(offset);
     }
 
-    offset = sleep(offset, 60*8);
+    offset = sleep(offset, 60*4);
+
+    for (int i = 0; i < 60; i++){
+        dimPhosphor(256/60.0); // fade Out
+        offset = writeToFile(offset);
+    }
 }

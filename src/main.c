@@ -20,8 +20,8 @@ int main(int argc, char* argv[])
         }
     }
 
-    //part1(0); // Takes 736 frames
-    part2(736);
+    part1(0); // Takes 736 frames
+    part2(736); // 510 frames, total 1246 frames
 
     return 0;
 }
